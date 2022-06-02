@@ -2,23 +2,25 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+    // Only add production seeders here
+    protected $seeds = [
+        RoleSeeder::class,
+        PermissionSeeder::class,
+    ];
+
     /**
      * Seed the application's database.
-     *
+     * https://laravel.com/docs/9.x/authorization#via-middleware
      * @return void
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        foreach ($this->seeds as $seed) {
+            $this->call($seed);
+        }
     }
 }
