@@ -56,6 +56,22 @@ return [
             'throw' => false,
         ],
 
+        'media' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/media'),
+            'url' => env('APP_URL').'/storage/media',
+            'permissions' => [
+                'file' => [
+                    'public'  => 0664,
+                    'private' => 0664,
+                ],
+                'dir' => [
+                    'public'  => 0775,
+                    'private' => 0775,
+                ],
+            ],
+        ],
+
     ],
 
     /*

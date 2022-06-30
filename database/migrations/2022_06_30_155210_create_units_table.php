@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UnitTypes;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,15 +14,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('recipes', function (Blueprint $table) {
+        Schema::create('units', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->time('cooking time');
-            $table->integer('people');
-            $table->json('ingredients');
-            $table->text('method');
-            $table->softDeletes();
+            $table->string('name')->nullable(false);
+            $table->string('type')->nullable(false);
+            $table->float('amount', 20, 16);
             $table->timestamps();
         });
     }
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recipes');
+        Schema::dropIfExists('units');
     }
 };
