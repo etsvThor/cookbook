@@ -18,19 +18,21 @@ class PermissionSeeder extends Seeder
     protected $permissions = [
         'view-admin-panel' => ['FoodCo', 'Board'],
 
-        'recipes.viewAny' => [],
+        'recipes.viewAny' => ['Authenticated'],
         'recipes.create' => ['Authenticated'],
         'recipes.update' => ['FoodCo', 'Board'],
         'recipes.delete' => ['FoodCo', 'Board'],
         'recipes.restore' => ['FoodCo', 'Board'],
         'recipes.forceDelete' => [],
 
-        'groups.viewAny' => [],
+        'groups.viewAny' => ['Authenticated'],
         'groups.create' => ['Authenticated'],
         'groups.update' => ['FoodCo', 'Board'],
         'groups.delete' => ['FoodCo', 'Board'],
         'groups.restore' => ['FoodCo', 'Board'],
         'groups.forceDelete' => [],
+
+        'manage-units' => ['FoodCo', 'Board'],
     ];
 
     /**
