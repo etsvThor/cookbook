@@ -10,6 +10,7 @@ class DatabaseSeeder extends Seeder
     protected $seeds = [
         RoleSeeder::class,
         PermissionSeeder::class,
+        UnitSeeder::class,
     ];
 
     /**

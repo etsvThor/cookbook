@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('people');
             $table->json('ingredients');
             $table->text('method');
+            $table->foreignId('user_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

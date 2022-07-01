@@ -5,7 +5,7 @@ namespace App\Enums;
 enum UnitTypes: string
 {
     case VOLUME = 'Volume';
-    case WEIGHT = 'Weight';
+    case MASS = 'Mass';
     case LENGTH = 'Length';
 
     public static function getArray(): array

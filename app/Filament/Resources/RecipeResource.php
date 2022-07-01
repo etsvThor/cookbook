@@ -12,6 +12,10 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TrashedFilter;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class RecipeResource extends Resource
 {
@@ -22,6 +26,13 @@ class RecipeResource extends Resource
     protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationGroup = 'Recipes';
+
+    protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'user.name'];
+    }
 
     public static function form(Form $form): Form
     {
@@ -34,6 +45,7 @@ class RecipeResource extends Resource
                 Forms\Components\SpatieMediaLibraryFileUpload::make('image')->collection('img'),
 
                 Forms\Components\TextInput::make('people')
+                    ->required()
                     ->numeric()
                     ->minValue(0)
                     ->helperText('For how many people/portions is the list of ingredients'),
@@ -41,6 +53,7 @@ class RecipeResource extends Resource
                 Forms\Components\TimePicker::make('cooking time'),
 
                 Forms\Components\Repeater::make('ingredients')
+                    ->required()
                     ->schema([
                         Forms\Components\TextInput::make('ingredient')
                             ->required(),
@@ -72,9 +85,7 @@ class RecipeResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('description'),
-                Tables\Columns\TextColumn::make('ingredients'),
-                Tables\Columns\TextColumn::make('method'),
+                Tables\Columns\TextColumn::make('user.name'),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -83,7 +94,14 @@ class RecipeResource extends Resource
                     ->dateTime(),
             ])
             ->filters([
-                //
+                TrashedFilter::make('is_trashed'),
+                SelectFilter::make('user')
+                    ->relationship('user', 'name'),
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\RestoreBulkAction::make(),
+                Tables\Actions\ForceDeleteBulkAction::make(),
             ]);
     }
     
@@ -102,5 +120,13 @@ class RecipeResource extends Resource
             'view' => Pages\ViewRecipe::route('/{record}'),
             'edit' => Pages\EditRecipe::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }
